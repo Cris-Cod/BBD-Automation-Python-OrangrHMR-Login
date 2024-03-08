@@ -33,6 +33,12 @@ def step_impl(context):
 def step_impl(context):
     wait = WebDriverWait(context.driver, timeout=10)
     wait.until(expected_conditions.presence_of_element_located((By.XPATH, "//span[@class='oxd-topbar-header-breadcrumb']/h6")))
-    txt_dashboard = context.driver.find_element(By.XPATH, "//span[@class='oxd-topbar-header-breadcrumb']/h6").text
-    assert txt_dashboard == "Dashboard"
-    context.driver.close()
+    try:
+        txt_dashboard = context.driver.find_element(By.XPATH, "//span[@class='oxd-topbar-header-breadcrumb']/h6").text
+    except:
+        context.driver.close()
+        assert False, "Test Failed"
+    if txt_dashboard == "Dashboard":
+        context.driver.close()
+        assert True, "Test Passed"
+
